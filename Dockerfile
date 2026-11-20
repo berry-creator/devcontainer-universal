@@ -72,9 +72,8 @@ RUN source "${HOME}/.zshrc" \
     && nvm use "${NODEJS_VERSION}" \
     && node_version="$(node --version)" \
     && echo "Installed Node.js ${node_version}" \
-    && [ "${node_version}" = "v${NODEJS_VERSION}" ]
-
-ENV PATH=${NVM_DIR}/versions/node/v${NODEJS_VERSION}/bin:${PATH}
+    && [ "${node_version}" = "v${NODEJS_VERSION}" ] \
+    && printf '\nnvm use --silent default\n' >> "${HOME}/.zshrc"
 
 ARG CLAUDE_PREINSTALLED=false
 RUN if [ "${CLAUDE_PREINSTALLED}" = "true" ]; then \

@@ -35,8 +35,11 @@ preinstall those CLIs.
 docker build -t devcontainer-universal .
 ```
 
-The Dockerfile pins Node.js to 24.17.0 and Go to 1.27.4 by default. Override
-`NODEJS_VERSION` or `GO_VERSION` with `--build-arg` if needed. Set
+The image installs Node.js 24.17.0 as the initial nvm default and Go 1.27.4.
+In Zsh, use `nvm install <version>` and `nvm use <version>` to install and
+switch Node.js versions; `nvm alias default <version>` changes the default for
+new Zsh sessions. Set `NODEJS_VERSION` or `GO_VERSION` with `--build-arg` to
+choose the initial versions at build time. Set
 `CLAUDE_PREINSTALLED`, `GEMINI_PREINSTALLED`, or `CODEX_PREINSTALLED` to `true`
 to preinstall the corresponding CLI.
 
