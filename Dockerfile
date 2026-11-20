@@ -18,6 +18,7 @@ RUN set -euo pipefail; \
       ca-certificates \
       curl \
       git \
+      fzf \
       ripgrep; \
     apt-get clean; \
     rm -rf /var/lib/apt/lists/* /usr/local/go
