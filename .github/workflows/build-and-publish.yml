@@ -22,36 +22,24 @@ jobs:
             claude: false
             gemini: false
             codex: false
-          - name: claude
-            suffix: '-claude'
-            latest: false
-            claude: true
-            gemini: false
-            codex: false
-          - name: gemini
-            suffix: '-gemini'
-            latest: false
-            claude: false
-            gemini: true
-            codex: false
           - name: codex
             suffix: '-codex'
             latest: false
             claude: false
             gemini: false
             codex: true
-          - name: claude-gemini
-            suffix: '-claude-gemini'
-            latest: false
-            claude: true
-            gemini: true
-            codex: false
-          - name: codex-gemini
-            suffix: '-codex-gemini'
+          - name: gemini
+            suffix: '-gemini'
             latest: false
             claude: false
             gemini: true
-            codex: true
+            codex: false
+          - name: claude
+            suffix: '-claude'
+            latest: false
+            claude: true
+            gemini: false
+            codex: false
           - name: all
             suffix: '-all'
             latest: false

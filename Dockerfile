@@ -6,6 +6,7 @@ SHELL ["/bin/zsh", "-c"]
 USER root
 
 ARG USERNAME=dev
+ARG TARGETARCH
 ARG NODEJS_VERSION=24.17.0
 ARG JDK_X86_64_DOWNLOAD_URL=https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-x64_bin.tar.gz
 ARG JDK_AARCH64_DOWNLOAD_URL=https://download.java.net/java/GA/jdk21.0.2/f2283984656d49d69e91c558476027ac/13/GPL/openjdk-21.0.2_linux-aarch64_bin.tar.gz
@@ -22,6 +23,22 @@ RUN set -euo pipefail; \
       ripgrep; \
     apt-get clean; \
     rm -rf /var/lib/apt/lists/* /usr/local/go
+
+RUN set -euo pipefail; \
+    yq_asset="yq_linux_${TARGETARCH}"; \
+    yq_release_url="https://github.com/mikefarah/yq/releases/latest/download"; \
+    yq_tmp_dir="$(mktemp -d)"; \
+    curl -fsSLo "${yq_tmp_dir}/${yq_asset}" "${yq_release_url}/${yq_asset}"; \
+    curl -fsSLo "${yq_tmp_dir}/checksums" "${yq_release_url}/checksums"; \
+    expected="$(awk -F '[ ]' -v asset="${yq_asset}" '$1 == asset { print $37 }' "${yq_tmp_dir}/checksums")"; \
+    actual="$(sha256sum "${yq_tmp_dir}/${yq_asset}" | awk '{ print $1 }')"; \
+    if [ "${expected}" != "${actual}" ]; then \
+      echo "yq checksum verification failed for ${yq_asset}" >&2; \
+      exit 1; \
+    fi; \
+    install -m 0755 "${yq_tmp_dir}/${yq_asset}" /usr/local/bin/yq; \
+    rm -r "${yq_tmp_dir}"; \
+    yq --version
 
 COPY --from=golang /usr/local/go /usr/local/go
 
